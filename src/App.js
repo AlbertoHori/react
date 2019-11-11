@@ -55,14 +55,13 @@ class App extends Component {
   addHandler = index => {
     const fruits = [...this.state.fruits];
     fruits[index].quantity++;
-    this.setState({ fruits });
-    this.totalPriceUpdater(fruits);
+    this.setState({fruits}, ()=>this.totalPriceUpdater(fruits));
   };
 
   totalPriceUpdater = fruits => {
     const sum = Object.keys(fruits)
       .map(fKey => {
-        return fruits[fKey].price * fruits[fKey].quantity;
+        return !fruits[fKey].disabled?fruits[fKey].price * fruits[fKey].quantity:0;
       })
       .reduce((sum, el) => {
         return sum + el;
@@ -84,22 +83,15 @@ class App extends Component {
     );
   };
 
-  quantityUpdater = index => {
-    const fruits = [...this.state.fruits];
-    fruits[index].quantity = 0;
-    this.setState({ fruits }, () => {
-      console.table(this.state.fruits);
-    });
-  };
 
   checkboxHandler = index => {
     const fruits = [...this.state.fruits];
     fruits[index].disabled = !fruits[index].disabled;
     this.setState({ fruits }, () => {
-      console.table(this.state.fruits);
+      this.totalPriceUpdater(fruits);
     });
-    this.quantityUpdater(index);
-    this.totalPriceUpdater(fruits);
+ 
+    
   };
 
   render() {
