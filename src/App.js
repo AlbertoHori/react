@@ -1,17 +1,12 @@
 import React, { Component } from "react";
 import classes from "./App.css";
 import Fruits from "./components/Fruits/Fruits";
-
 import banana from "./assets/banana.png";
-
-import shoppingcart from "./assets/shoppingcart.jpg";
-
 import apple from "./assets/apple.jpg";
 import strawberry from "./assets/strawberry.jpg";
 import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
-import Logo from "./components/Logo/Logo";
-import Auxiliary from "./hoc/Auxiliary";
-import Toolbar from './components/Toolbar/Toolbar';
+
+import Toolbar from "./components/Toolbar/Toolbar";
 
 class App extends Component {
   state = {
@@ -26,7 +21,7 @@ class App extends Component {
         kJ: 3,
         variety: "delicious",
         carbs: 120,
-        disabled:false
+        disabled: false
       },
       {
         id: "sdgs",
@@ -38,7 +33,7 @@ class App extends Component {
         kJ: 80,
         variety: "dwarf cavendish",
         carbs: 180,
-        disabled:false
+        disabled: false
       },
       {
         id: "bbbs",
@@ -50,12 +45,11 @@ class App extends Component {
         kJ: 60,
         variety: "earliglow",
         carbs: 55,
-        disabled:false
+        disabled: false
       }
     ],
     title: "The fruit shop",
-    totalPrice: 0,
-    
+    totalPrice: 0
   };
 
   addHandler = index => {
@@ -64,22 +58,19 @@ class App extends Component {
     this.setState({ fruits });
     this.totalPriceUpdater(fruits);
   };
-  totalPriceUpdater=(fruits)=>{
-    const oldPrice=this.state.totalPrice;
-  
-    const sum =Object.keys(fruits)
-    .map(fKey=>{
-      return fruits[fKey].price*fruits[fKey].quantity;
-    }
-      
-      ).reduce((sum,el)=>{
-        return sum+el;
-      },0);
-    this.setState({totalPrice:sum});
+
+  totalPriceUpdater = fruits => {
+    const sum = Object.keys(fruits)
+      .map(fKey => {
+        return fruits[fKey].price * fruits[fKey].quantity;
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+    this.setState({ totalPrice: sum });
   };
 
   detailHandler = index => {
-    
     const fruits = [...this.state.fruits];
     const doesShow = !fruits[index].showFruit;
     fruits[index].showFruit = doesShow;
@@ -92,38 +83,44 @@ class App extends Component {
       }
     );
   };
-  
+
+  quantityUpdater = index => {
+    const fruits = [...this.state.fruits];
+    fruits[index].quantity = 0;
+    this.setState({ fruits }, () => {
+      console.table(this.state.fruits);
+    });
+  };
+
+  checkboxHandler = index => {
+    const fruits = [...this.state.fruits];
+    fruits[index].disabled = !fruits[index].disabled;
+    this.setState({ fruits }, () => {
+      console.table(this.state.fruits);
+    });
+    this.quantityUpdater(index);
+    this.totalPriceUpdater(fruits);
+  };
 
   render() {
     return (
       <div className={classes.App}>
-        <Toolbar
-        title='The fruit shop'
-        />
-      
-
+        <Toolbar title="The fruit shop" />
         <table align="center">
-          
           <tbody>
             <Fruits
               fruits={this.state.fruits}
               addHandler={this.addHandler.bind(this)}
               detailHandler={this.detailHandler.bind(this)}
-              
+              checkboxHandler={this.checkboxHandler.bind(this)}
             />
           </tbody>
         </table>
-
-        <Auxiliary>
-          <ShoppingCart
-            title='Total amount in € to pay'
-            fruits={this.state.fruits}
-            totalPrice={this.state.totalPrice}
-          ></ShoppingCart>
-        </Auxiliary>
-       
-       
-      
+        <ShoppingCart
+          title="Total amount in € to pay"
+          fruits={this.state.fruits}
+          totalPrice={this.state.totalPrice}
+        ></ShoppingCart>
       </div>
     );
   }

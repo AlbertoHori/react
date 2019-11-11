@@ -24,6 +24,9 @@
     background-color: lightgreen;
     color: black;
   }
+  .App button:disabled{
+    background-color:red;
+  }
   .App button.Red{
     background-color:red;
   }
