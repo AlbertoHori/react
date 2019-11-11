@@ -27,6 +27,9 @@ background-color: rgb(14, 172, 80);
 font-size: 30;
 
 }
+.button.Red{
+    background-color:red;
+  }
 
   @media(min-width:500px){
       .Fruit{

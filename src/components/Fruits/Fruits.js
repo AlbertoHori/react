@@ -1,37 +1,29 @@
 import React, { Component } from "react";
 import classes from "./Fruits.css";
 import Checkbox from "../Checkbox";
-import Auxiliary from "../../hoc/Auxiliary";
 
 class Fruits extends Component {
-  state = {
-    disabledFruit: false
-  };
-
-  checkboxHandler = () => {
-    const doesShow = !this.state.disabledFruit;
-    this.setState({ disabledFruit: doesShow }, () => {
-      console.log(this.state.disabledFruit);
-    });
-  };
-
   render() {
     return this.props.fruits.map(
-      ({ id, name, quantity, showFruit, kJ, variety, carbs, price }, index) => {
+      (
+        { id, name, quantity, showFruit, kJ, variety, carbs, price, disabled },
+        index
+      ) => {
         return (
           <div className={classes.body}>
             <h1>Product</h1>
             <h1>Quantity</h1>
             <div>
               <Checkbox
-                clicked={this.checkboxHandler}
-                chck={true}
+                id={id}
+                chck={!disabled}
                 value={name}
+                index={index}
+                clicked={() => this.props.checkboxHandler(index)}
               />
               <strong>
                 <p>I am the {name}</p>
               </strong>
-
               <img
                 className={classes.body}
                 src={require("../../assets/" +
@@ -44,8 +36,12 @@ class Fruits extends Component {
               <strong>
                 <p className={classes.text}>{quantity}</p>
               </strong>
-
-              <button onClick={() => this.props.addHandler(index)} value={id}>
+              <button
+                onClick={() => this.props.addHandler(index)}
+                key={id}
+                name={index}
+                disabled={disabled}
+              >
                 Add one more
               </button>
             </div>
