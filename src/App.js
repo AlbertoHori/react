@@ -5,7 +5,7 @@ import banana from "./assets/banana.png";
 import apple from "./assets/apple.jpg";
 import strawberry from "./assets/strawberry.jpg";
 import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
-
+import axios from '../src/Axios';
 import Toolbar from "./components/Toolbar/Toolbar";
 
 class App extends Component {
@@ -94,6 +94,31 @@ class App extends Component {
     
   };
 
+  purchaseHandler=()=>{
+    const order = {
+     fruits: this.state.fruits,
+      price: this.state.totalPrice,
+      customer: {
+        name: "Ning Testperson",
+        address: {
+          street: "Teststrasse",
+          zipCode: "65818",
+          country: "Germany"
+        },
+        email: "test@test.com"
+      },
+      deliveryMethod: "fastest"
+    };
+    axios
+      .post("/orders2.json", order)
+      .then(response => {
+        console.log('order is being posted');
+      })
+      .catch(error => {
+        console.log('something is wrong');
+      });
+  }
+
   render() {
     return (
       <div className={classes.App}>
@@ -113,6 +138,7 @@ class App extends Component {
           fruits={this.state.fruits}
           totalPrice={this.state.totalPrice}
         ></ShoppingCart>
+        <button onClick={this.purchaseHandler}>Buy now!</button>
       </div>
     );
   }
