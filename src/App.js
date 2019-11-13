@@ -49,7 +49,8 @@ class App extends Component {
       }
     ],
     title: "The fruit shop",
-    totalPrice: 0
+    totalPrice: 0,
+    show:true
   };
 
   addHandler = index => {
@@ -112,7 +113,8 @@ class App extends Component {
     axios
       .post("/orders2.json", order)
       .then(response => {
-        console.log('order is being posted');
+        this.setState({
+          show:false});
       })
       .catch(error => {
         console.log('something is wrong');
@@ -123,7 +125,8 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <Toolbar title="The fruit shop" />
-        <table align="center">
+      {show && (
+      <table align="center">
           <tbody>
             <Fruits
               fruits={this.state.fruits}
@@ -132,13 +135,14 @@ class App extends Component {
               checkboxHandler={this.checkboxHandler.bind(this)}
             />
           </tbody>
-        </table>
-        <ShoppingCart
+        </table>  )} 
+        {show && (<ShoppingCart
           title="Total amount in € to pay"
           fruits={this.state.fruits}
           totalPrice={this.state.totalPrice}
-        ></ShoppingCart>
-        <button onClick={this.purchaseHandler}>Buy now!</button>
+        ></ShoppingCart>)
+        }
+      <button onClick={this.purchaseHandler}>Buy now!</button>  
       </div>
     );
   }
