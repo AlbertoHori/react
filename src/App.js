@@ -119,6 +119,7 @@ class App extends Component {
       .catch(error => {
         console.log('something is wrong');
       });
+      consol.log('this.state.show' +this.state.show);
   }
 
   render() {
